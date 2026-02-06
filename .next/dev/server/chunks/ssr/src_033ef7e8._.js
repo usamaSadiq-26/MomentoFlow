@@ -4354,9 +4354,9 @@ function Home() {
     };
     const handleSaveTask = async (taskData)=>{
         try {
-            const currentUser1 = JSON.parse(localStorage.getItem('user') || '{}');
+            const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
             // Check if user is logged in
-            if (!currentUser1.id) {
+            if (!currentUser.id) {
                 console.error('User not logged in');
                 alert('You must be logged in to create tasks');
                 return;
@@ -4385,7 +4385,7 @@ function Home() {
                 type: taskData.type,
                 dueDate: taskData.dueDate,
                 status: modalMode === 'create' ? getStatusTitle(selectedColumn) : detailTask?.status,
-                createdById: currentUser1.id,
+                createdById: currentUser.id,
                 assignedId: taskData.assignee?.id || null,
                 labels: taskData.labels?.map((l)=>({
                         name: l,
@@ -4451,7 +4451,7 @@ function Home() {
                 })
             });
             if (response.ok) {
-                console.log('Task moved successfully:', taskId, 'by user:', currentUser.name);
+                console.log('Task moved successfully:', taskId, 'by user:', user?.name);
                 await loadTasks();
             }
         } catch (error) {

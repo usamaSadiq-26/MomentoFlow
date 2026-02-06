@@ -612,7 +612,7 @@ export default function Home() {
       })
 
       if (response.ok) {
-        console.log('Task moved successfully:', taskId, 'by user:', currentUser.name)
+        console.log('Task moved successfully:', taskId, 'by user:', user?.name)
         await loadTasks()
       }
     } catch (error) {
