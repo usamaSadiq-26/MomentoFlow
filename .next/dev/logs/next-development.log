@@ -19948,3 +19948,14 @@ Import traces:
 [01:26:15.139] Server  LOG     ✓ Compiled in 783ms
 [01:26:27.991] Server  LOG     ✓ Compiled in 407ms
 [01:26:28.348] Browser LOG     TaskDetail received task: null
+[01:48:27.479] Browser LOG     User object: {"avatar":null,"email":"theusamasadiq@gmail.com","id":"cmko8lb4z0000vmzcq1plsspw","name":"usama","role":"ADMIN"}
+[01:48:27.479] Browser LOG     User role: ADMIN
+[01:48:27.480] Browser LOG     User role uppercase: ADMIN
+[01:48:27.480] Browser LOG     Is Admin: true
+[01:48:27.480] Browser LOG     Column "Backlog" (id: backlog) received 0 tasks
+[01:48:27.480] Browser LOG     Column "To Do" (id: todo) received 2 tasks
+[01:48:27.480] Browser LOG     Column "In Progress" (id: inprogress) received 1 tasks
+[01:48:27.480] Browser LOG     Column "Review" (id: review) received 1 tasks
+[01:48:27.480] Browser LOG     Column "Done" (id: done) received 0 tasks
+[01:48:27.480] Browser LOG     TaskDetail received task: null
+[01:49:41.029] Server  LOG     ✓ Compiled in 3.6s
