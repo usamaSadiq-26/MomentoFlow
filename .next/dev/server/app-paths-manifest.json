@@ -1,1 +1,6 @@
-{}
+{
+  "/(dashboard)/page": "app/(dashboard)/page.js",
+  "/api/chat/unread/route": "app/api/chat/unread/route.js",
+  "/api/notifications/route": "app/api/notifications/route.js",
+  "/api/tasks/route": "app/api/tasks/route.js"
+}
