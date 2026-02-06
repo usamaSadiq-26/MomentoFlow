@@ -128,36 +128,35 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Notific
 ;
 ;
 const metadata = {
-    title: "Z.ai Code Scaffold - AI-Powered Development",
-    description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
+    title: "MomentoFlow - Project Management Tool",
+    description: "Advanced project management and team synchronization tool. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
     keywords: [
-        "Z.ai",
+        "MomentoFlow",
+        "Project Management",
+        "Task Tracking",
         "Next.js",
         "TypeScript",
-        "Tailwind CSS",
-        "shadcn/ui",
-        "AI development",
-        "React"
+        "Tailwind CSS"
     ],
     authors: [
         {
-            name: "Z.ai Team"
+            name: "MomentoFlow Team"
         }
     ],
     icons: {
         icon: "/favicon.ico"
     },
     openGraph: {
-        title: "Z.ai Code Scaffold",
-        description: "AI-powered development with modern React stack",
-        url: "https://chat.z.ai",
-        siteName: "Z.ai",
+        title: "MomentoFlow",
+        description: "Modern project management for high-performance teams",
+        url: "https://momentoflow.com",
+        siteName: "MomentoFlow",
         type: "website"
     },
     twitter: {
         card: "summary_large_image",
-        title: "Z.ai Code Scaffold",
-        description: "AI-powered development with modern React stack"
+        title: "MomentoFlow",
+        description: "Modern project management for high-performance teams"
     }
 };
 function RootLayout({ children }) {

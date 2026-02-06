@@ -144,112 +144,114 @@ export default function MembersPage() {
     return (
         <div className="flex flex-col h-full bg-transparent">
             <DashboardHeader title="Team Members" user={currentUser} />
-            <div className="container mx-auto p-8 max-w-6xl">
+            <main className="flex-1 overflow-y-auto custom-scrollbar">
+                <div className="container mx-auto px-4 py-6 space-y-6">
 
-                <Card className="bg-slate-900/50 border-white/10 backdrop-blur-xl">
-                    <CardHeader>
-                        <CardTitle className="text-xl text-white">Users Directory</CardTitle>
-                        <CardDescription className="text-slate-400">
-                            Total members: {users.length}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="border-white/10 hover:bg-white/5">
-                                    <TableHead className="text-slate-300">Name</TableHead>
-                                    <TableHead className="text-slate-300">Role</TableHead>
-                                    <TableHead className="text-slate-300">Email</TableHead>
-                                    <TableHead className="text-slate-300">Joined</TableHead>
-                                    <TableHead className="text-right text-slate-300">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {users.map((user) => (
-                                    <TableRow key={user.id} className="border-white/10 hover:bg-white/5">
-                                        <TableCell className="font-medium text-slate-200">
-                                            <div className="flex items-center gap-3">
-                                                <Avatar className="h-8 w-8">
-                                                    <AvatarFallback className="text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
-                                                        {user.name?.split(' ').map(n => n[0]).join('') || 'U'}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                {user.name}
-                                                {currentUser?.id === user.id && (
-                                                    <Badge variant="outline" className="ml-2 text-[10px] border-yellow-500/50 text-yellow-300">You</Badge>
-                                                )}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                variant="secondary"
-                                                className={user.role === 'ADMIN'
-                                                    ? 'bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30'
-                                                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700/70'
-                                                }
-                                            >
-                                                {user.role}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-slate-400">{user.email}</TableCell>
-                                        <TableCell className="text-slate-400">
-                                            {new Date(user.createdAt).toLocaleDateString()}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            {currentUser?.role === 'ADMIN' && (
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {user.id !== currentUser.id && (
-                                                        <>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => handleToggleRole(user)}
-                                                                className="h-8 w-8 p-0 text-slate-400 hover:text-white hover:bg-slate-700/50"
-                                                                title="Toggle Role"
-                                                            >
-                                                                <UserCog className="h-4 w-4" />
-                                                            </Button>
-
-                                                            <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                        className="h-8 w-8 p-0 text-slate-400 hover:text-red-400 hover:bg-red-500/10"
-                                                                    >
-                                                                        <Trash2 className="h-4 w-4" />
-                                                                    </Button>
-                                                                </AlertDialogTrigger>
-                                                                <AlertDialogContent className="bg-slate-900 border-slate-700 text-slate-200">
-                                                                    <AlertDialogHeader>
-                                                                        <AlertDialogTitle>Delete User?</AlertDialogTitle>
-                                                                        <AlertDialogDescription className="text-slate-400">
-                                                                            Are you sure you want to delete {user.name}? This action cannot be undone.
-                                                                        </AlertDialogDescription>
-                                                                    </AlertDialogHeader>
-                                                                    <AlertDialogFooter>
-                                                                        <AlertDialogCancel className="bg-transparent border-slate-700 hover:bg-slate-800 text-slate-200 hover:text-white">Cancel</AlertDialogCancel>
-                                                                        <AlertDialogAction
-                                                                            onClick={() => handleDeleteUser(user.id)}
-                                                                            className="bg-red-600 hover:bg-red-700 text-white border-none"
-                                                                        >
-                                                                            Delete
-                                                                        </AlertDialogAction>
-                                                                    </AlertDialogFooter>
-                                                                </AlertDialogContent>
-                                                            </AlertDialog>
-                                                        </>
+                    <Card className="bg-slate-900/50 border-white/10 backdrop-blur-xl">
+                        <CardHeader>
+                            <CardTitle className="text-xl text-white">Users Directory</CardTitle>
+                            <CardDescription className="text-slate-400">
+                                Total members: {users.length}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="border-white/10 hover:bg-white/5">
+                                        <TableHead className="text-slate-300">Name</TableHead>
+                                        <TableHead className="text-slate-300">Role</TableHead>
+                                        <TableHead className="text-slate-300">Email</TableHead>
+                                        <TableHead className="text-slate-300">Joined</TableHead>
+                                        <TableHead className="text-right text-slate-300">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {users.map((user) => (
+                                        <TableRow key={user.id} className="border-white/10 hover:bg-white/5">
+                                            <TableCell className="font-medium text-slate-200">
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar className="h-8 w-8">
+                                                        <AvatarFallback className="text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
+                                                            {user.name?.split(' ').map(n => n[0]).join('') || 'U'}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    {user.name}
+                                                    {currentUser?.id === user.id && (
+                                                        <Badge variant="outline" className="ml-2 text-[10px] border-yellow-500/50 text-yellow-300">You</Badge>
                                                     )}
                                                 </div>
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-            </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    variant="secondary"
+                                                    className={user.role === 'ADMIN'
+                                                        ? 'bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30'
+                                                        : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700/70'
+                                                    }
+                                                >
+                                                    {user.role}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-slate-400">{user.email}</TableCell>
+                                            <TableCell className="text-slate-400">
+                                                {new Date(user.createdAt).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                {currentUser?.role === 'ADMIN' && (
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        {user.id !== currentUser.id && (
+                                                            <>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    onClick={() => handleToggleRole(user)}
+                                                                    className="h-8 w-8 p-0 text-slate-400 hover:text-white hover:bg-slate-700/50"
+                                                                    title="Toggle Role"
+                                                                >
+                                                                    <UserCog className="h-4 w-4" />
+                                                                </Button>
+
+                                                                <AlertDialog>
+                                                                    <AlertDialogTrigger asChild>
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="sm"
+                                                                            className="h-8 w-8 p-0 text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+                                                                        >
+                                                                            <Trash2 className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </AlertDialogTrigger>
+                                                                    <AlertDialogContent className="bg-slate-900 border-slate-700 text-slate-200">
+                                                                        <AlertDialogHeader>
+                                                                            <AlertDialogTitle>Delete User?</AlertDialogTitle>
+                                                                            <AlertDialogDescription className="text-slate-400">
+                                                                                Are you sure you want to delete {user.name}? This action cannot be undone.
+                                                                            </AlertDialogDescription>
+                                                                        </AlertDialogHeader>
+                                                                        <AlertDialogFooter>
+                                                                            <AlertDialogCancel className="bg-transparent border-slate-700 hover:bg-slate-800 text-slate-200 hover:text-white">Cancel</AlertDialogCancel>
+                                                                            <AlertDialogAction
+                                                                                onClick={() => handleDeleteUser(user.id)}
+                                                                                className="bg-red-600 hover:bg-red-700 text-white border-none"
+                                                                            >
+                                                                                Delete
+                                                                            </AlertDialogAction>
+                                                                        </AlertDialogFooter>
+                                                                    </AlertDialogContent>
+                                                                </AlertDialog>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </div>
+            </main>
         </div>
     )
 }

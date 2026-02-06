@@ -12,24 +12,24 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "MomentoFlow - Project Management Tool",
+  description: "Advanced project management and team synchronization tool. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
+  keywords: ["MomentoFlow", "Project Management", "Task Tracking", "Next.js", "TypeScript", "Tailwind CSS"],
+  authors: [{ name: "MomentoFlow Team" }],
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "MomentoFlow",
+    description: "Modern project management for high-performance teams",
+    url: "https://momentoflow.com",
+    siteName: "MomentoFlow",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "MomentoFlow",
+    description: "Modern project management for high-performance teams",
   },
 };
 

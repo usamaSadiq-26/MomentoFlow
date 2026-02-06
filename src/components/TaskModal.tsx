@@ -274,7 +274,7 @@ export function TaskModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-900/95 backdrop-blur-xl border border-white/10 text-slate-200">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-950/80 backdrop-blur-xl border border-white/10 text-slate-200">
         <DialogHeader>
           <DialogTitle className="text-white">
             {mode === 'create' ? 'Create New Task' : 'Edit Task'}

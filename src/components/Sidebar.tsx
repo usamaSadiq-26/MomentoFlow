@@ -72,7 +72,7 @@ export function Sidebar() {
                     <SquareKanban className="text-white h-5 w-5" />
                 </div>
                 <span className="text-lg font-bold text-white bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
-                    TeamSync
+                    MomentoFlow
                 </span>
             </div>
 

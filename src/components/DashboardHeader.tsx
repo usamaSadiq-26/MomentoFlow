@@ -21,7 +21,7 @@ interface DashboardHeaderProps {
     tasks?: any
 }
 
-export function DashboardHeader({ title = 'Team Task Management Board', user, tasks = {} }: DashboardHeaderProps) {
+export function DashboardHeader({ title = 'MomentoFlow - Task Management Board', user, tasks = {} }: DashboardHeaderProps) {
     const [notifications, setNotifications] = useState<any[]>([])
     const [showNotifications, setShowNotifications] = useState(false)
 
@@ -85,7 +85,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
     }
 
     return (
-        <header className="bg-white/5 backdrop-blur-xl border-b border-white/10 shadow-lg sticky top-0 z-10 w-full">
+        <header className="bg-slate-900/50 backdrop-blur-xl border-b border-white/10 shadow-lg sticky top-0 z-10 w-full">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
@@ -141,7 +141,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
                                     )}
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-slate-800/95 backdrop-blur-xl border border-white/10 w-80">
+                            <DropdownMenuContent align="end" className="bg-slate-900/50 backdrop-blur-xl border border-white/10 w-80">
                                 <div className="p-3 border-b border-white/10">
                                     <h3 className="font-semibold text-white">Notifications</h3>
                                 </div>

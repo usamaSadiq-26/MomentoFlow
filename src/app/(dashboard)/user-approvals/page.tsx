@@ -109,119 +109,123 @@ export default function UserApprovalsPage() {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="flex flex-col h-full bg-transparent">
             <DashboardHeader title="User Registration Approvals" user={user} />
+            <main className="flex-1 overflow-y-auto custom-scrollbar">
+                <div className="container mx-auto px-4 py-6 space-y-6">
 
-            {/* Info Card */}
-            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-white text-lg flex items-center gap-2">
-                        <Shield className="h-5 w-5 text-yellow-400" />
-                        System Security
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-slate-400">
-                        Account approvals are required for all new registrations. Once approved, users will be able to log in and access their dashboard.
-                        Rejected registrations will be permanently deleted from the system.
-                    </p>
-                </CardContent>
-            </Card>
+                    {/* Info Card */}
+                    <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-white text-lg flex items-center gap-2">
+                                <Shield className="h-5 w-5 text-yellow-400" />
+                                System Security
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm text-slate-400">
+                                Account approvals are required for all new registrations. Once approved, users will be able to log in and access their dashboard.
+                                Rejected registrations will be permanently deleted from the system.
+                            </p>
+                        </CardContent>
+                    </Card>
 
-            {/* Pending Users List */}
-            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 overflow-hidden">
-                <CardHeader>
-                    <CardTitle className="text-white flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <UserPlus className="h-5 w-5 text-yellow-400" />
-                            Pending Registrations
-                        </div>
-                        <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20">
-                            {pendingUsers.length} Requested
-                        </Badge>
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                    <div className="overflow-x-auto custom-scrollbar">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="bg-black/20 border-b border-white/10">
-                                    <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">User Info</th>
-                                    <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">Requested Role</th>
-                                    <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">Registration Date</th>
-                                    <th className="text-right py-4 px-6 text-slate-400 font-medium text-sm">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={4} className="py-12 text-center text-slate-500">Loading pending requests...</td>
-                                    </tr>
-                                ) : pendingUsers.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={4} className="py-12 text-center text-slate-500">No pending user approvals found.</td>
-                                    </tr>
-                                ) : (
-                                    pendingUsers.map((user) => (
-                                        <tr key={user.id} className="group hover:bg-white/5 transition-colors">
-                                            <td className="py-4 px-6">
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar className="h-10 w-10 border border-white/10 shadow-lg">
-                                                        <AvatarFallback className="bg-yellow-500/20 text-yellow-400 text-lg">
-                                                            {user.name?.[0] || 'U'}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-sm font-semibold text-white">{user.name || 'Anonymous'}</p>
-                                                        <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
-                                                            <Mail className="h-3 w-3" />
-                                                            {user.email}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="py-4 px-6">
-                                                <Badge className={`${user.role === 'ADMIN' ? 'bg-amber-500/20 text-amber-400 border-amber-500/20' : 'bg-slate-500/20 text-slate-400 border-slate-500/20'}`}>
-                                                    {user.role}
-                                                </Badge>
-                                            </td>
-                                            <td className="py-4 px-6 text-sm text-slate-400">
-                                                <div className="flex items-center gap-2">
-                                                    <CalendarIcon className="h-3.5 w-3.5" />
-                                                    {formatDate(user.createdAt)}
-                                                </div>
-                                            </td>
-                                            <td className="py-4 px-6 text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        size="sm"
-                                                        className="bg-emerald-600 hover:bg-emerald-700 text-white h-9 px-4 rounded-lg gap-2"
-                                                        onClick={() => handleApprove(user.id)}
-                                                        disabled={actionLoading === user.id}
-                                                    >
-                                                        <UserCheck className="h-4 w-4" />
-                                                        Approve
-                                                    </Button>
-                                                    <Button
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 h-9 px-4 rounded-lg gap-2 border border-white/5"
-                                                        onClick={() => handleReject(user.id)}
-                                                        disabled={actionLoading === user.id}
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                        Reject
-                                                    </Button>
-                                                </div>
-                                            </td>
+                    {/* Pending Users List */}
+                    <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 overflow-hidden">
+                        <CardHeader>
+                            <CardTitle className="text-white flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <UserPlus className="h-5 w-5 text-yellow-400" />
+                                    Pending Registrations
+                                </div>
+                                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20">
+                                    {pendingUsers.length} Requested
+                                </Badge>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                            <div className="overflow-x-auto custom-scrollbar">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="bg-black/20 border-b border-white/10">
+                                            <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">User Info</th>
+                                            <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">Requested Role</th>
+                                            <th className="text-left py-4 px-6 text-slate-400 font-medium text-sm">Registration Date</th>
+                                            <th className="text-right py-4 px-6 text-slate-400 font-medium text-sm">Actions</th>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </CardContent>
-            </Card>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan={4} className="py-12 text-center text-slate-500">Loading pending requests...</td>
+                                            </tr>
+                                        ) : pendingUsers.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={4} className="py-12 text-center text-slate-500">No pending user approvals found.</td>
+                                            </tr>
+                                        ) : (
+                                            pendingUsers.map((user) => (
+                                                <tr key={user.id} className="group hover:bg-white/5 transition-colors">
+                                                    <td className="py-4 px-6">
+                                                        <div className="flex items-center gap-3">
+                                                            <Avatar className="h-10 w-10 border border-white/10 shadow-lg">
+                                                                <AvatarFallback className="bg-yellow-500/20 text-yellow-400 text-lg">
+                                                                    {user.name?.[0] || 'U'}
+                                                                </AvatarFallback>
+                                                            </Avatar>
+                                                            <div>
+                                                                <p className="text-sm font-semibold text-white">{user.name || 'Anonymous'}</p>
+                                                                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+                                                                    <Mail className="h-3 w-3" />
+                                                                    {user.email}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 px-6">
+                                                        <Badge className={`${user.role === 'ADMIN' ? 'bg-amber-500/20 text-amber-400 border-amber-500/20' : 'bg-slate-500/20 text-slate-400 border-slate-500/20'}`}>
+                                                            {user.role}
+                                                        </Badge>
+                                                    </td>
+                                                    <td className="py-4 px-6 text-sm text-slate-400">
+                                                        <div className="flex items-center gap-2">
+                                                            <CalendarIcon className="h-3.5 w-3.5" />
+                                                            {formatDate(user.createdAt)}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 px-6 text-right">
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <Button
+                                                                size="sm"
+                                                                className="bg-emerald-600 hover:bg-emerald-700 text-white h-9 px-4 rounded-lg gap-2"
+                                                                onClick={() => handleApprove(user.id)}
+                                                                disabled={actionLoading === user.id}
+                                                            >
+                                                                <UserCheck className="h-4 w-4" />
+                                                                Approve
+                                                            </Button>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 h-9 px-4 rounded-lg gap-2 border border-white/5"
+                                                                onClick={() => handleReject(user.id)}
+                                                                disabled={actionLoading === user.id}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                                Reject
+                                                            </Button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </main>
         </div>
     )
 }

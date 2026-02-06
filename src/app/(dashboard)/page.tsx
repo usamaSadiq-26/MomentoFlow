@@ -112,7 +112,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
   return (
     <div ref={setNodeRef} style={style}>
       <Card
-        className={`cursor-pointer hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300 bg-slate-900/90 backdrop-blur-lg border ${highlighted ? 'border-yellow-500/50 shadow-yellow-500/30 ring-2 ring-yellow-500/50' : 'border-white/10'}`}
+        className={`cursor-pointer transition-all duration-300 bg-slate-950/60 backdrop-blur-xl border ${highlighted ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/20 ring-2 ring-yellow-500/50' : 'border-white/5 shadow-lg shadow-black/20'} hover:bg-slate-900/70 hover:shadow-yellow-500/5`}
         onClick={(e) => {
           console.log('Card clicked:', task.title, task.id)
           onViewDetail(task)
@@ -151,7 +151,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-slate-800/95 border-white/10">
+                <DropdownMenuContent align="end" className="bg-slate-900/50 backdrop-blur-xl border-white/10">
                   {isAdmin && (
                     <>
                       <DropdownMenuItem
@@ -190,7 +190,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
           </div>
 
           {/* Title */}
-          <CardTitle className="text-sm font-medium text-slate-200 line-clamp-2 mb-2">
+          <CardTitle className="text-sm font-semibold text-white/90 group-hover:text-white line-clamp-2 mb-2 transition-colors">
             {task.title}
           </CardTitle>
 
@@ -206,7 +206,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
                 </Badge>
               ))}
               {task.labels.length > 3 && (
-                <Badge className="text-xs px-2 py-0.5 bg-slate-700 text-slate-300">
+                <Badge className="text-[10px] px-1.5 py-0 bg-slate-800/80 text-slate-400 border border-white/5">
                   +{task.labels.length - 3}
                 </Badge>
               )}
@@ -254,11 +254,13 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
 
           {/* Assignee Section */}
           {task.assignedTo && (
-            <div className="mt-2 pt-2 border-t border-white/10 flex items-center gap-2" title={`Assigned to ${task.assignedTo.name}`}>
-              <User className="h-3.5 w-3.5 text-slate-400" />
-              <span className="text-xs text-slate-400">
-                Assigned to: <span className="text-slate-200 font-medium ml-1">{task.assignedTo.name}</span>
-              </span>
+            <div className="mt-2 pt-2 border-t border-white/5 flex items-center justify-between" title={`Assigned to ${task.assignedTo.name}`}>
+              <div className="flex items-center gap-1.5 min-w-0">
+                <div className="h-5 w-5 rounded-full bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
+                  <span className="text-[10px] font-bold text-yellow-500">{task.assignedTo.name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}</span>
+                </div>
+                <span className="text-[11px] text-slate-400 truncate font-medium">{task.assignedTo.name}</span>
+              </div>
             </div>
           )}
         </CardHeader>
@@ -278,7 +280,7 @@ function DroppableColumn({ id, title, color, tasks, isAdmin, onEdit, onViewDetai
       ref={setNodeRef}
       key={id}
       id={id}
-      className="flex-shrink-0 w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col shadow-xl shadow-yellow-500/10"
+      className="flex-shrink-0 w-80 bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col shadow-xl"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -313,11 +315,14 @@ function DroppableColumn({ id, title, color, tasks, isAdmin, onEdit, onViewDetai
         </div>
       </div>
 
-      <div className={`flex-1 space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-2 custom-scrollbar rounded-xl ${isOver ? 'bg-yellow-500/10' : 'bg-slate-800'}`}>
+      <div className={`flex-1 space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] p-2 custom-scrollbar rounded-xl border border-white/5 ${isOver ? 'bg-yellow-500/5' : 'bg-black/20'}`}>
         <SortableContext items={tasks.map((t: any) => ({ id: t.id, ...t }))} id={id} strategy={verticalListSortingStrategy}>
           {tasks.length === 0 ? (
-            <div className="text-center text-slate-500 py-8">
-              <p className="text-sm">No tasks in {title}</p>
+            <div className="text-center text-slate-500/40 py-12 flex flex-col items-center gap-2">
+              <div className="h-10 w-10 rounded-full bg-slate-900/40 flex items-center justify-center border border-white/5">
+                <Plus className="h-5 w-5 opacity-20" />
+              </div>
+              <p className="text-xs font-medium">No tasks in {title}</p>
             </div>
           ) : (
             tasks.map((task) => (
@@ -664,7 +669,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="bg-white/5 backdrop-blur-xl border-t border-white/10 shadow-lg mt-auto">
+      <footer className="bg-slate-900/50 backdrop-blur-xl border-t border-white/10 shadow-lg mt-auto">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between text-sm text-slate-400">
             <div className="flex items-center gap-2">

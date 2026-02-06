@@ -44,8 +44,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url('/background-abstract.jpg')] bg-cover bg-center bg-fixed no-repeat p-4">
-      <Card className="w-full max-w-md bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-xl shadow-yellow-500/10">
+    <div className="min-h-screen flex items-center justify-center bg-[url('/background-land.jpg')] bg-cover bg-center bg-fixed no-repeat p-4">
+      <Card className="w-full max-w-md bg-slate-900/50 backdrop-blur-xl border border-white/10 shadow-xl shadow-yellow-500/10">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-white bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
             Welcome Back
