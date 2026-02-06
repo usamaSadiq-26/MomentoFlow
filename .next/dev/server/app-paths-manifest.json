@@ -1,6 +1,10 @@
 {
+  "/(dashboard)/chat/page": "app/(dashboard)/chat/page.js",
   "/(dashboard)/page": "app/(dashboard)/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/chat/route": "app/api/chat/route.js",
   "/api/chat/unread/route": "app/api/chat/unread/route.js",
   "/api/notifications/route": "app/api/notifications/route.js",
-  "/api/tasks/route": "app/api/tasks/route.js"
+  "/api/tasks/route": "app/api/tasks/route.js",
+  "/auth/login/page": "app/auth/login/page.js"
 }

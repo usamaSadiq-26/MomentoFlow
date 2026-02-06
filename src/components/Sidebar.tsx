@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { SquareKanban, Users, LogOut, Clock, ShieldCheck, UserCheck, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
