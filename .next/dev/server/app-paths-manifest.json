@@ -1,16 +1,1 @@
-{
-  "/(dashboard)/attendance-admin/page": "app/(dashboard)/attendance-admin/page.js",
-  "/(dashboard)/attendance/page": "app/(dashboard)/attendance/page.js",
-  "/(dashboard)/members/page": "app/(dashboard)/members/page.js",
-  "/(dashboard)/page": "app/(dashboard)/page.js",
-  "/(dashboard)/user-approvals/page": "app/(dashboard)/user-approvals/page.js",
-  "/api/attendance/route": "app/api/attendance/route.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/api/notifications/route": "app/api/notifications/route.js",
-  "/api/tasks/[id]/comments/route": "app/api/tasks/[id]/comments/route.js",
-  "/api/tasks/[id]/route": "app/api/tasks/[id]/route.js",
-  "/api/tasks/route": "app/api/tasks/route.js",
-  "/api/users/pending/route": "app/api/users/pending/route.js",
-  "/api/users/route": "app/api/users/route.js",
-  "/auth/login/page": "app/auth/login/page.js"
-}
+{}

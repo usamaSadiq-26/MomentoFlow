@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { SquareKanban, Users, LogOut, Clock, ShieldCheck, UserCheck } from 'lucide-react'
+import { SquareKanban, Users, LogOut, Clock, ShieldCheck, UserCheck, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
@@ -12,13 +12,37 @@ export function Sidebar() {
     const pathname = usePathname()
     const router = useRouter()
     const [userRole, setUserRole] = useState<string | null>(null)
+    const [unreadChatCount, setUnreadChatCount] = useState(0)
 
     useEffect(() => {
         const savedUser = localStorage.getItem('user')
         if (savedUser) {
             setUserRole(JSON.parse(savedUser).role)
         }
-    }, [])
+
+        // Fetch unread chat count
+        const fetchUnread = async () => {
+            const lastVisit = localStorage.getItem('lastChatVisit') || new Date(0).toISOString()
+            try {
+                const res = await fetch(`/api/chat/unread?since=${lastVisit}`)
+                const data = await res.json()
+                setUnreadChatCount(data.count || 0)
+            } catch (error) {
+                console.error('Failed to fetch unread count:', error)
+            }
+        }
+
+        fetchUnread()
+        const interval = setInterval(fetchUnread, 10000)
+
+        // Clear count if we are on the chat page
+        if (pathname === '/chat') {
+            localStorage.setItem('lastChatVisit', new Date().toISOString())
+            setUnreadChatCount(0)
+        }
+
+        return () => clearInterval(interval)
+    }, [pathname])
 
     const handleLogout = () => {
         localStorage.removeItem('user')
@@ -39,6 +63,13 @@ export function Sidebar() {
             icon: Clock,
             active: pathname === '/attendance',
             show: true, // Visible to everyone (diff views or just employee)
+        },
+        {
+            href: '/chat',
+            label: 'Chat',
+            icon: MessageSquare,
+            active: pathname === '/chat',
+            show: true,
         },
         {
             href: '/attendance-admin',
@@ -92,7 +123,12 @@ export function Sidebar() {
                             "h-5 w-5 transition-colors",
                             link.active ? "text-yellow-400" : "text-slate-500 group-hover:text-slate-300"
                         )} />
-                        <span className="font-medium">{link.label}</span>
+                        <span className="font-medium flex-1">{link.label}</span>
+                        {link.href === '/chat' && unreadChatCount > 0 && (
+                            <Badge className="bg-yellow-500 text-black border-none text-[10px] px-1.5 h-4 min-w-[16px] flex items-center justify-center animate-pulse">
+                                {unreadChatCount}
+                            </Badge>
+                        )}
                     </Link>
                 ))}
             </nav>

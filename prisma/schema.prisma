@@ -28,6 +28,7 @@ model User {
   comments        Comment[]
   notifications   Notification[]
   attendanceRecords Attendance[]
+  chatMessages     ChatMessage[]
 }
 
 model Task {
@@ -145,4 +146,15 @@ model Attendance {
   @@unique([userId, date])
   @@index([userId])
   @@index([status])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
 }
