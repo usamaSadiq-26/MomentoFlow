@@ -45,9 +45,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/background-abstract.jpg')] bg-cover bg-center bg-fixed no-repeat p-4">
-      <Card className="w-full max-w-md bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-xl shadow-purple-500/10">
+      <Card className="w-full max-w-md bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-xl shadow-yellow-500/10">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold text-white bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+          <CardTitle className="text-2xl font-bold text-white bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
             Welcome Back
           </CardTitle>
           <CardDescription className="text-slate-400">
@@ -72,7 +72,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-black/30 border-slate-700/50 text-slate-300 placeholder:text-slate-500 focus:border-violet-500/50"
+                className="bg-black/30 border-slate-700/50 text-slate-300 placeholder:text-slate-500 focus:border-yellow-500/50"
               />
             </div>
 
@@ -86,13 +86,13 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-black/30 border-slate-700/50 text-slate-300 placeholder:text-slate-500 focus:border-violet-500/50"
+                className="bg-black/30 border-slate-700/50 text-slate-300 placeholder:text-slate-500 focus:border-yellow-500/50"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 shadow-lg shadow-purple-500/25 disabled:bg-purple-800 disabled:shadow-purple-500/30"
+              className="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 shadow-lg shadow-yellow-500/25 disabled:bg-amber-800 disabled:shadow-yellow-500/30 text-black font-semibold"
               disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
@@ -100,7 +100,7 @@ export default function LoginPage() {
 
             <div className="text-center text-sm">
               Don't have an account?{' '}
-              <Link href="/auth/signup" className="text-violet-400 hover:text-violet-300 hover:underline font-medium">
+              <Link href="/auth/signup" className="text-yellow-400 hover:text-yellow-300 hover:underline font-medium">
                 Sign up
               </Link>
             </div>

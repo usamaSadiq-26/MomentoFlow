@@ -136,7 +136,7 @@ export default function MembersPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500" />
             </div>
         )
     }
@@ -170,13 +170,13 @@ export default function MembersPage() {
                                         <TableCell className="font-medium text-slate-200">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-8 w-8">
-                                                    <AvatarFallback className="text-xs bg-violet-500/20 text-violet-300 border border-violet-500/30">
+                                                    <AvatarFallback className="text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
                                                         {user.name?.split(' ').map(n => n[0]).join('') || 'U'}
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 {user.name}
                                                 {currentUser?.id === user.id && (
-                                                    <Badge variant="outline" className="ml-2 text-[10px] border-violet-500/50 text-violet-300">You</Badge>
+                                                    <Badge variant="outline" className="ml-2 text-[10px] border-yellow-500/50 text-yellow-300">You</Badge>
                                                 )}
                                             </div>
                                         </TableCell>
@@ -184,7 +184,7 @@ export default function MembersPage() {
                                             <Badge
                                                 variant="secondary"
                                                 className={user.role === 'ADMIN'
-                                                    ? 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30'
+                                                    ? 'bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30'
                                                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700/70'
                                                 }
                                             >

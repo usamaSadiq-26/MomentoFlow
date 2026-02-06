@@ -32,7 +32,7 @@ import { format } from 'date-fns'
 
 const LABEL_COLORS = {
   Urgent: 'bg-red-500',
-  Feature: 'bg-purple-500',
+  Feature: 'bg-yellow-500',
   Bug: 'bg-orange-500',
   Research: 'bg-blue-500',
   Design: 'bg-pink-500',
@@ -48,9 +48,10 @@ interface TaskDetailProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   task: any
+  onTaskUpdate?: () => void
 }
 
-export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
+export function TaskDetail({ open, onOpenChange, task, onTaskUpdate }: TaskDetailProps) {
   console.log('TaskDetail received task:', task)
   const [newComment, setNewComment] = useState('')
   const [newChecklistItem, setNewChecklistItem] = useState('')
@@ -67,60 +68,101 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
 
   const isOverdue = task?.dueDate && new Date(task.dueDate) < new Date()
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (!newComment.trim()) return
 
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
 
-    const comment = {
-      id: Date.now().toString(),
-      content: newComment,
-      user: {
-        name: currentUser.name || 'User',
-        avatar: currentUser.name?.split(' ').map(n => n[0]).join('') || 'U',
-      },
-      createdAt: new Date(),
-    }
+    try {
+      const response = await fetch(`/api/tasks/${task.id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: newComment,
+          userId: currentUser.id,
+        }),
+      })
 
-    setLocalComments([comment, ...localComments])
-    setNewComment('')
-  }
-
-  const handleToggleChecklistItem = (checklistId: string, itemId: string) => {
-    setLocalChecklists(localChecklists.map(cl => {
-      if (cl.id === checklistId) {
-        return {
-          ...cl,
-          items: cl.items.map(item =>
-            item.id === itemId ? { ...item, isCompleted: !item.isCompleted } : item
-          ),
-        }
+      if (response.ok) {
+        const savedComment = await response.json()
+        setLocalComments([savedComment, ...localComments])
+        setNewComment('')
+        if (onTaskUpdate) onTaskUpdate()
+      } else {
+        console.error('Failed to save comment')
       }
-      return cl
-    }))
+    } catch (error) {
+      console.error('Error adding comment:', error)
+    }
   }
 
-  const handleAddChecklistItem = (checklistId: string) => {
+  const handleToggleChecklistItem = async (checklistId: string, itemId: string) => {
+    const checklist = localChecklists.find(cl => cl.id === checklistId)
+    const item = checklist?.items?.find((i: any) => i.id === itemId)
+
+    if (!item) return
+
+    try {
+      const response = await fetch(`/api/checklist-items/${itemId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isCompleted: !item.isCompleted }),
+      })
+
+      if (response.ok) {
+        setLocalChecklists(localChecklists.map(cl => {
+          if (cl.id === checklistId) {
+            return {
+              ...cl,
+              items: cl.items.map((i: any) =>
+                i.id === itemId ? { ...i, isCompleted: !i.isCompleted } : i
+              ),
+            }
+          }
+          return cl
+        }))
+        if (onTaskUpdate) onTaskUpdate()
+      }
+    } catch (error) {
+      console.error('Error toggling checklist item:', error)
+    }
+  }
+
+  const handleAddChecklistItem = async (checklistId: string) => {
     if (!newChecklistItem.trim()) return
 
-    setLocalChecklists(localChecklists.map(cl => {
-      if (cl.id === checklistId) {
-        return {
-          ...cl,
-          items: [
-            ...cl.items,
-            {
-              id: Date.now().toString(),
-              title: newChecklistItem,
-              isCompleted: false,
-              position: cl.items.length,
-            },
-          ],
-        }
+    const checklist = localChecklists.find(cl => cl.id === checklistId)
+    const position = checklist?.items?.length || 0
+
+    try {
+      const response = await fetch(`/api/checklists/${checklistId}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newChecklistItem,
+          position,
+        }),
+      })
+
+      if (response.ok) {
+        const newItem = await response.json()
+        setLocalChecklists(localChecklists.map(cl => {
+          if (cl.id === checklistId) {
+            return {
+              ...cl,
+              items: [...cl.items, newItem],
+            }
+          }
+          return cl
+        }))
+        setNewChecklistItem('')
+        if (onTaskUpdate) onTaskUpdate()
       }
-      return cl
-    }))
-    setNewChecklistItem('')
+    } catch (error) {
+      console.error('Error adding checklist item:', error)
+    }
   }
 
   if (!task) return null
@@ -178,7 +220,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
               <h3 className="text-sm font-semibold text-slate-200">Assigned to:</h3>
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarFallback className="text-xs bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                  <AvatarFallback className="text-xs bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                     {task?.assignedTo?.avatar || task?.assignedTo?.name?.charAt(0) || '?'}
                   </AvatarFallback>
                 </Avatar>
@@ -195,7 +237,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
                 <div key={checklist.id} className="border border-white/10 bg-slate-800/30 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-                      <CheckSquare2 className="h-4 w-4 text-violet-400" />
+                      <CheckSquare2 className="h-4 w-4 text-yellow-400" />
                       {checklist.title}
                     </h3>
                     <Badge variant="secondary" className="text-xs bg-slate-700 text-slate-300 border-none">
@@ -209,7 +251,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
                           type="checkbox"
                           checked={item.isCompleted}
                           onChange={() => handleToggleChecklistItem(checklist.id, item.id)}
-                          className="h-4 w-4 rounded border-slate-600 bg-slate-900/50 text-violet-500 focus:ring-violet-500"
+                          className="h-4 w-4 rounded border-slate-600 bg-slate-900/50 text-yellow-500 focus:ring-yellow-500"
                         />
                         <span
                           className={cn(
@@ -247,7 +289,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
             {/* Comments */}
             <div className="border border-white/10 bg-slate-800/30 rounded-lg p-4">
               <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-violet-400" />
+                <MessageSquare className="h-4 w-4 text-yellow-400" />
                 Comments ({localComments.length})
               </h3>
 
@@ -258,7 +300,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
                   localComments.map((comment: any) => (
                     <div key={comment.id} className="flex gap-3">
                       <Avatar className="h-8 w-8 flex-shrink-0">
-                        <AvatarFallback className="text-xs bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                        <AvatarFallback className="text-xs bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                           {comment.user?.avatar || 'U'}
                         </AvatarFallback>
                       </Avatar>
@@ -288,7 +330,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
                   type="button"
                   onClick={handleAddComment}
                   disabled={!newComment.trim()}
-                  className="h-auto self-end bg-violet-600 hover:bg-violet-700 text-white"
+                  className="h-auto self-end bg-yellow-600 hover:bg-yellow-700 text-black font-semibold"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
@@ -299,7 +341,7 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
             {task?.attachments?.length > 0 && (
               <div className="border border-white/10 bg-slate-800/30 rounded-lg p-4">
                 <h3 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
-                  <Paperclip className="h-4 w-4 text-violet-400" />
+                  <Paperclip className="h-4 w-4 text-yellow-400" />
                   Attachments ({task.attachments.length})
                 </h3>
                 <div className="space-y-2">
@@ -310,16 +352,16 @@ export function TaskDetail({ open, onOpenChange, task }: TaskDetailProps) {
                       download={attachment.name}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 p-2 bg-slate-900/50 rounded-lg border border-white/10 hover:bg-slate-800/50 hover:border-violet-500/50 transition-all cursor-pointer group"
+                      className="flex items-center gap-2 p-2 bg-slate-900/50 rounded-lg border border-white/10 hover:bg-slate-800/50 hover:border-yellow-500/50 transition-all cursor-pointer group"
                     >
-                      <Paperclip className="h-4 w-4 text-slate-400 group-hover:text-violet-400 transition-colors" />
+                      <Paperclip className="h-4 w-4 text-slate-400 group-hover:text-yellow-400 transition-colors" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-slate-200 truncate group-hover:text-violet-300 transition-colors">{attachment.name}</p>
+                        <p className="text-sm text-slate-200 truncate group-hover:text-yellow-300 transition-colors">{attachment.name}</p>
                         <p className="text-xs text-slate-400">
                           {attachment.size ? `${(attachment.size / 1024).toFixed(1)} KB` : 'Unknown size'}
                         </p>
                       </div>
-                      <svg className="h-4 w-4 text-slate-400 group-hover:text-violet-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="h-4 w-4 text-slate-400 group-hover:text-yellow-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
                     </a>

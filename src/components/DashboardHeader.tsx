@@ -60,7 +60,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
     const getNotificationIcon = (type: string) => {
         switch (type) {
             case 'card_created': return <Calendar className="h-4 w-4 text-blue-400" />
-            case 'card_assigned': return <User className="h-4 w-4 text-violet-400" />
+            case 'card_assigned': return <User className="h-4 w-4 text-yellow-400" />
             case 'card_moved': return <ArrowRight className="h-4 w-4 text-amber-400" />
             case 'card_commented': return <MessageSquare className="h-4 w-4 text-emerald-400" />
             case 'attendance_update': return <Clock className="h-4 w-4 text-rose-400" />
@@ -88,14 +88,14 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
         <header className="bg-white/5 backdrop-blur-xl border-b border-white/10 shadow-lg sticky top-0 z-10 w-full">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                    <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent">
                         {title}
                     </h1>
                     <div className="flex items-center gap-4">
                         {user ? (
                             <div className="flex items-center gap-3">
                                 <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="text-sm bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                                    <AvatarFallback className="text-sm bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                                         {user.name?.split(' ').map((n: string) => n[0]).join('') || 'U'}
                                     </AvatarFallback>
                                 </Avatar>
@@ -118,7 +118,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
                                     </Button>
                                 </Link>
                                 <Link href="/auth/signup">
-                                    <Button className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 gap-2">
+                                    <Button className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black font-semibold gap-2">
                                         <Plus className="h-4 w-4" />
                                         Sign Up
                                     </Button>
@@ -154,7 +154,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
                                         notifications.slice(0, 10).map((notification: any) => (
                                             <DropdownMenuItem
                                                 key={notification.id}
-                                                className="flex items-start gap-3 px-3 py-2 text-slate-200 hover:bg-violet-500/10 hover:text-white focus:bg-violet-500/10 focus:text-white"
+                                                className="flex items-start gap-3 px-3 py-2 text-slate-200 hover:bg-yellow-500/10 hover:text-white focus:bg-yellow-500/10 focus:text-white"
                                             >
                                                 {getNotificationIcon(notification.type)}
                                                 <div className="flex-1 min-w-0">
@@ -162,7 +162,7 @@ export function DashboardHeader({ title = 'Team Task Management Board', user, ta
                                                     <p className="text-xs text-slate-500">{formatNotificationTime(notification.createdAt)}</p>
                                                 </div>
                                                 {!notification.isRead && (
-                                                    <div className="w-2 h-2 rounded-full bg-violet-500 flex-shrink-0 mt-1"></div>
+                                                    <div className="w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0 mt-1"></div>
                                                 )}
                                             </DropdownMenuItem>
                                         ))

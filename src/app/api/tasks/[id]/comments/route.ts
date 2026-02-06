@@ -81,26 +81,52 @@ export async function POST(
       },
     })
 
-    // Create notification for task assignee and creator
+    // Create notification (role-aware)
+    const commenter = await db.user.findUnique({
+      where: { id: userId },
+      select: { role: true, name: true }
+    })
+    const isCommenterAdmin = commenter?.role?.toUpperCase() === 'ADMIN'
+
     const taskData = await db.task.findUnique({
       where: { id },
       select: { assignedId: true, createdById: true },
     })
 
     if (taskData) {
-      const userIdsToNotify = [taskData.assignedId, taskData.createdById].filter(
-        (id): id is string => id !== null && id !== userId
-      )
-
-      for (const notifyUserId of new Set(userIdsToNotify)) {
-        await db.notification.create({
-          data: {
-            type: 'card_commented',
-            message: `New comment on task: ${task.title}`,
-            taskId: id,
-            userId: notifyUserId,
-          },
+      if (isCommenterAdmin) {
+        // Admin commented: Notify the assignee if they are an employee
+        if (taskData.assignedId && taskData.assignedId !== userId) {
+          const assignee = await db.user.findUnique({ where: { id: taskData.assignedId }, select: { role: true } })
+          if (assignee?.role?.toUpperCase() !== 'ADMIN') {
+            await db.notification.create({
+              data: {
+                type: 'card_commented',
+                message: `Admin commented on task: ${task.title}`,
+                taskId: id,
+                userId: taskData.assignedId,
+              },
+            })
+          }
+        }
+      } else {
+        // Employee commented: Notify all admins
+        const admins = await db.user.findMany({
+          where: {
+            role: 'ADMIN',
+            id: { not: userId }
+          }
         })
+        for (const admin of admins) {
+          await db.notification.create({
+            data: {
+              type: 'card_commented',
+              message: `${commenter?.name || 'An employee'} commented on task: ${task.title}`,
+              taskId: id,
+              userId: admin.id,
+            },
+          })
+        }
       }
     }
 

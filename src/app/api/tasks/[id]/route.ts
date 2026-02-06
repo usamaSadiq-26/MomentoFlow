@@ -10,7 +10,7 @@ export async function GET(
   try {
     const resolvedParams = await params
     const id = resolvedParams.id
-    
+
     const task = await db.task.findUnique({
       where: { id },
       include: {
@@ -80,7 +80,7 @@ export async function PUT(
   try {
     const resolvedParams = await params
     const id = resolvedParams.id
-    
+
     const body = await request.json()
     const {
       title,
@@ -97,7 +97,7 @@ export async function PUT(
 
     const existingTask = await db.task.findUnique({
       where: { id },
-      select: { assignedId: true, title: true, status: true },
+      select: { assignedId: true, title: true, status: true, createdById: true },
     })
 
     if (!existingTask) {
@@ -150,9 +150,9 @@ export async function PUT(
           where: { id },
           data: {
             labels: {
-              create: labels.map((label: { name: string; color: string }) => ({
-                name: label.name,
-                color: label.color || 'gray',
+              create: labels.map((label: any) => ({
+                name: typeof label === 'string' ? label : label.name,
+                color: typeof label === 'object' && label.color ? label.color : 'gray',
               })),
             },
           },
@@ -162,55 +162,55 @@ export async function PUT(
 
     // Create notifications for status changes (role-aware)
     if (status && status !== existingTask.status) {
-      const currentUser = await db.user.findUnique({
-        where: { id: existingTask.assignedId || existingTask.createdById },
-        select: { name: true, role: true },
+      const { updaterId, updaterRole } = body
+      const changerRole = updaterRole?.toUpperCase() || 'EMPLOYEE'
+
+      const users = await db.user.findMany({
+        where: {
+          id: { not: updaterId || 'none' } // Never notify the person who did the action
+        }
       })
 
-      const changerName = currentUser?.name || 'A user'
-      const changerRole = currentUser?.role?.toUpperCase() || 'USER'
-
-      const users = await db.user.findMany()
-
       for (const user of users) {
-        if (user.id === (existingTask.assignedId || existingTask.createdById)) {
-          continue
-        }
+        const isUserAdmin = user.role?.toUpperCase() === 'ADMIN'
+        const isUserAssignee = user.id === (assignedId || existingTask.assignedId)
+        const isUserCreator = user.id === existingTask.createdById
 
-        if (user.role?.toUpperCase() === 'ADMIN' && changerRole !== 'ADMIN') {
-          await db.notification.create({
-            data: {
-              type: 'card_moved',
-              message: `${changerName} moved task "${title || existingTask.title}" from ${existingTask.status} to ${status}`,
-              taskId: id,
-              userId: user.id,
-            },
-          })
-        }
-        else if (existingTask.assignedId === user.id) {
-          await db.notification.create({
-            data: {
-              type: 'card_moved',
-              message: `Task "${title || existingTask.title}" moved from ${existingTask.status} to ${status}`,
-              taskId: id,
-              userId: user.id,
-            },
-          })
-        }
-        else if (assignedId === user.id) {
-          await db.notification.create({
-            data: {
-              type: 'card_assigned',
-              message: `You have been assigned to task: ${title || existingTask.title}`,
-              taskId: id,
-              userId: user.id,
-            },
-          })
+        // Logic:
+        // 1. If an Employee moves a card, notify all Admins.
+        // 2. If an Admin moves a card, notify the Assignee (if they are an Employee).
+
+        if (changerRole === 'ADMIN') {
+          // Admin action: Notify the assignee if they are an employee
+          if (isUserAssignee && !isUserAdmin) {
+            await db.notification.create({
+              data: {
+                type: 'card_moved',
+                message: `Admin has moved your task "${title || existingTask.title}" from ${existingTask.status} to ${status}`,
+                taskId: id,
+                userId: user.id,
+              },
+            })
+          }
+        } else {
+          // Employee action: Notify admins
+          if (isUserAdmin) {
+            const changer = await db.user.findUnique({ where: { id: updaterId }, select: { name: true } })
+            const changerName = changer?.name || 'An employee'
+            await db.notification.create({
+              data: {
+                type: 'card_moved',
+                message: `${changerName} moved task "${title || existingTask.title}" from ${existingTask.status} to ${status}`,
+                taskId: id,
+                userId: user.id,
+              },
+            })
+          }
         }
       }
     }
 
-    if (assignedId && assignedId !== existingTask.assignedId) {
+    if (assignedId && assignedId !== existingTask.assignedId && assignedId !== body.updaterId) {
       await db.notification.create({
         data: {
           type: 'card_assigned',
@@ -262,7 +262,7 @@ export async function DELETE(
   try {
     const resolvedParams = await params
     const id = resolvedParams.id
-    
+
     await db.task.delete({
       where: { id },
     })

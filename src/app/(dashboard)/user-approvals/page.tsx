@@ -116,7 +116,7 @@ export default function UserApprovalsPage() {
             <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
                 <CardHeader className="pb-2">
                     <CardTitle className="text-white text-lg flex items-center gap-2">
-                        <Shield className="h-5 w-5 text-violet-400" />
+                        <Shield className="h-5 w-5 text-yellow-400" />
                         System Security
                     </CardTitle>
                 </CardHeader>
@@ -133,10 +133,10 @@ export default function UserApprovalsPage() {
                 <CardHeader>
                     <CardTitle className="text-white flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <UserPlus className="h-5 w-5 text-violet-400" />
+                            <UserPlus className="h-5 w-5 text-yellow-400" />
                             Pending Registrations
                         </div>
-                        <Badge variant="outline" className="bg-violet-500/10 text-violet-400 border-violet-500/20">
+                        <Badge variant="outline" className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20">
                             {pendingUsers.length} Requested
                         </Badge>
                     </CardTitle>
@@ -167,7 +167,7 @@ export default function UserApprovalsPage() {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-10 w-10 border border-white/10 shadow-lg">
-                                                        <AvatarFallback className="bg-violet-500/20 text-violet-400 text-lg">
+                                                        <AvatarFallback className="bg-yellow-500/20 text-yellow-400 text-lg">
                                                             {user.name?.[0] || 'U'}
                                                         </AvatarFallback>
                                                     </Avatar>

@@ -45,7 +45,7 @@ const PRIORITIES = ['High', 'Medium', 'Low'] as const
 const CARD_TYPES = ['Task', 'Bug', 'Feature'] as const
 const LABEL_COLORS = {
   Urgent: 'bg-red-500',
-  Feature: 'bg-purple-500',
+  Feature: 'bg-yellow-500',
   Bug: 'bg-orange-500',
   Research: 'bg-blue-500',
   Design: 'bg-pink-500',
@@ -82,9 +82,45 @@ export function TaskModal({
   )
   const [assignee, setAssignee] = useState(task?.assignedTo?.id || '')
   const [labels, setLabels] = useState<string[]>(task?.labels || [])
-  const [checklist, setChecklist] = useState(task?.checklist || [])
-  const [comments, setComments] = useState(task?.comments || [])
-  const [attachments, setAttachments] = useState(task?.attachments || [])
+  const [checklist, setChecklist] = useState<any[]>(task?.checklist || [])
+  const [comments, setComments] = useState<any[]>(task?.comments || [])
+  const [attachments, setAttachments] = useState<any[]>(task?.attachments || [])
+  // Properly initialize states from task prop
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title || '')
+      setDescription(task.description || '')
+      setPriority(task.priority || 'Medium')
+      setType(task.type || 'Task')
+      setDueDate(task.dueDate ? new Date(task.dueDate) : undefined)
+      setAssignee(task.assignedTo?.id || '')
+
+      // Initialize labels
+      if (task.labels) {
+        setLabels(task.labels.map((l: any) => l.name))
+      }
+
+      // Initialize checklists (flatten the first checklist)
+      if (task.checklists && task.checklists.length > 0) {
+        setChecklist(task.checklists[0].items.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          completed: item.isCompleted
+        })))
+      }
+
+      // Initialize comments
+      if (task.comments) {
+        setComments(task.comments)
+      }
+
+      // Initialize attachments
+      if (task.attachments) {
+        setAttachments(task.attachments)
+      }
+    }
+  }, [task])
+
   const [newLabel, setNewLabel] = useState('')
   const [newChecklistItem, setNewChecklistItem] = useState('')
   const [newComment, setNewComment] = useState('')
@@ -190,19 +226,48 @@ export function TaskModal({
   }
 
   const handleSave = () => {
+    // Collect any unsaved data
+    const finalComments = [...comments]
+    if (newComment.trim()) {
+      const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+      finalComments.push({
+        id: Date.now().toString(),
+        content: newComment.trim(),
+        user: {
+          name: currentUser.name || 'User',
+          avatar: currentUser.name?.split(' ').map((n: string) => n[0]).join('') || 'U',
+        },
+        createdAt: new Date(),
+      })
+    }
+
+    const finalChecklist = [...checklist]
+    if (newChecklistItem.trim()) {
+      finalChecklist.push({
+        id: Date.now().toString(),
+        title: newChecklistItem.trim(),
+        completed: false,
+      })
+    }
+
     const taskData = {
-      title,
+      title: title.trim(),
       description,
       priority,
       type,
       dueDate: dueDate?.toISOString(),
       assignee: users.find((u) => u.id === assignee),
       labels,
-      checklist,
-      comments,
+      checklist: finalChecklist,
+      comments: finalComments,
       attachments,
     }
     onSave(taskData)
+
+    // Clear temporary fields
+    setNewComment('')
+    setNewChecklistItem('')
+    setNewLabel('')
   }
 
   const isOverdue = dueDate && dueDate < new Date()
@@ -230,7 +295,7 @@ export function TaskModal({
                 placeholder="Enter task title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 bg-slate-900/50 border-white/10 text-white placeholder:text-slate-500 focus:ring-violet-500"
+                className="mt-1 bg-slate-900/50 border-white/10 text-white placeholder:text-slate-500 focus:ring-yellow-500"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -278,7 +343,7 @@ export function TaskModal({
               placeholder="Add a more detailed description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 min-h-[100px] bg-slate-900/50 border-white/10 text-white placeholder:text-slate-500 focus:ring-violet-500"
+              className="mt-1 min-h-[100px] bg-slate-900/50 border-white/10 text-white placeholder:text-slate-500 focus:ring-yellow-500"
             />
           </div>
 
@@ -322,7 +387,7 @@ export function TaskModal({
                     <SelectItem key={user.id} value={user.id} className="focus:bg-slate-700 focus:text-white">
                       <div className="flex items-center gap-2">
                         <Avatar className="h-5 w-5">
-                          <AvatarFallback className="text-xs bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                          <AvatarFallback className="text-xs bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                             {user.avatar}
                           </AvatarFallback>
                         </Avatar>
@@ -410,7 +475,7 @@ export function TaskModal({
                     type="checkbox"
                     checked={item.completed}
                     onChange={() => handleToggleChecklistItem(item.id)}
-                    className="h-4 w-4 rounded border-slate-600 bg-slate-900/50 text-violet-500 focus:ring-violet-500"
+                    className="h-4 w-4 rounded border-slate-600 bg-slate-900/50 text-yellow-500 focus:ring-yellow-500"
                   />
                   <span
                     className={cn(
@@ -460,7 +525,7 @@ export function TaskModal({
               {comments.map((comment: any) => (
                 <div key={comment.id} className="flex gap-2 text-sm">
                   <Avatar className="h-6 w-6 flex-shrink-0">
-                    <AvatarFallback className="text-xs bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                    <AvatarFallback className="text-xs bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                       {comment.user.avatar}
                     </AvatarFallback>
                   </Avatar>
@@ -552,7 +617,7 @@ export function TaskModal({
           <Button variant="outline" onClick={() => onOpenChange(false)} className="border-slate-700/50 bg-black/30 text-slate-300 hover:bg-black/50 hover:text-white">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 shadow-lg shadow-purple-500/25">
+          <Button onClick={handleSave} className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 shadow-lg shadow-yellow-500/25 text-black font-semibold">
             {mode === 'create' ? 'Create Task' : 'Save Changes'}
           </Button>
         </DialogFooter>

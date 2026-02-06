@@ -7,6 +7,8 @@
   "/api/attendance/route": "app/api/attendance/route.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/api/notifications/route": "app/api/notifications/route.js",
+  "/api/tasks/[id]/comments/route": "app/api/tasks/[id]/comments/route.js",
+  "/api/tasks/[id]/route": "app/api/tasks/[id]/route.js",
   "/api/tasks/route": "app/api/tasks/route.js",
   "/api/users/pending/route": "app/api/users/pending/route.js",
   "/api/users/route": "app/api/users/route.js",

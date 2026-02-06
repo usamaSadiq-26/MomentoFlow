@@ -32,7 +32,7 @@ const NOTIFICATION_ICONS = {
 
 const NOTIFICATION_COLORS = {
   card_assigned: 'bg-blue-100 text-blue-700',
-  card_moved: 'bg-purple-100 text-purple-700',
+  card_moved: 'bg-yellow-100 text-yellow-700',
   card_commented: 'bg-green-100 text-green-700',
   card_created: 'bg-slate-100 text-slate-700',
   card_updated: 'bg-amber-100 text-amber-700',
@@ -85,7 +85,7 @@ export function NotificationPanel() {
               return (
                 <Card
                   key={notification.id}
-                  className={`transition-all hover:shadow-md ${!notification.isRead ? 'border-violet-500' : ''}`}
+                  className={`transition-all hover:shadow-md ${!notification.isRead ? 'border-yellow-500' : ''}`}
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-4">
@@ -105,13 +105,13 @@ export function NotificationPanel() {
                         </div>
                       </div>
                       {!notification.isRead && (
-                        <Badge className="bg-violet-500">New</Badge>
+                        <Badge className="bg-yellow-500 text-black">New</Badge>
                       )}
                     </div>
                   </CardHeader>
                   {notification.taskId && (
                     <CardContent className="pt-0">
-                      <Button variant="ghost" size="sm" className="text-violet-600 hover:text-violet-700">
+                      <Button variant="ghost" size="sm" className="text-yellow-600 hover:text-yellow-700 font-semibold">
                         View Task
                       </Button>
                     </CardContent>

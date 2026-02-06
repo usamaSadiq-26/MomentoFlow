@@ -59,7 +59,7 @@ const COLUMNS = [
   { id: 'backlog', title: 'Backlog', color: 'bg-slate-500' },
   { id: 'todo', title: 'To Do', color: 'bg-blue-500' },
   { id: 'inprogress', title: 'In Progress', color: 'bg-amber-500' },
-  { id: 'review', title: 'Review', color: 'bg-purple-500' },
+  { id: 'review', title: 'Review', color: 'bg-yellow-500' },
   { id: 'done', title: 'Done', color: 'bg-green-500' },
 ]
 
@@ -72,12 +72,12 @@ const PRIORITIES = {
 const CARD_TYPES = {
   Task: { color: 'bg-slate-100 text-slate-700', icon: '📋' },
   Bug: { color: 'bg-red-100 text-red-700', icon: '🐛' },
-  Feature: { color: 'bg-purple-100 text-purple-700', icon: '✨' },
+  Feature: { color: 'bg-yellow-100 text-yellow-700', icon: '✨' },
 }
 
 const LABEL_COLORS = {
   Urgent: 'bg-red-500',
-  Feature: 'bg-purple-500',
+  Feature: 'bg-yellow-500',
   Bug: 'bg-orange-500',
   Research: 'bg-blue-500',
   Design: 'bg-pink-500',
@@ -112,7 +112,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
   return (
     <div ref={setNodeRef} style={style}>
       <Card
-        className={`cursor-pointer hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 bg-slate-900/90 backdrop-blur-lg border ${highlighted ? 'border-violet-500/50 shadow-purple-500/30 ring-2 ring-violet-500/50' : 'border-white/10'}`}
+        className={`cursor-pointer hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300 bg-slate-900/90 backdrop-blur-lg border ${highlighted ? 'border-yellow-500/50 shadow-yellow-500/30 ring-2 ring-yellow-500/50' : 'border-white/10'}`}
         onClick={(e) => {
           console.log('Card clicked:', task.title, task.id)
           onViewDetail(task)
@@ -178,7 +178,7 @@ function SortableCard({ task, onEdit, onViewDetail, onMoveToColumn, highlighted,
                         console.log('Moving task:', task.id, 'from status:', task.status, 'to column:', column.id, 'to status:', column.title)
                         onMoveToColumn(task.id, column.id)
                       }}
-                      className="text-slate-200 hover:bg-violet-500/20 hover:text-white focus:bg-violet-500/20 focus:text-white"
+                      className="text-slate-200 hover:bg-yellow-500/20 hover:text-white focus:bg-yellow-500/20 focus:text-white"
                     >
                       <ArrowRight className="h-4 w-4 mr-2" />
                       Move to {column.title}
@@ -278,7 +278,7 @@ function DroppableColumn({ id, title, color, tasks, isAdmin, onEdit, onViewDetai
       ref={setNodeRef}
       key={id}
       id={id}
-      className="flex-shrink-0 w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col shadow-xl shadow-purple-500/10"
+      className="flex-shrink-0 w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col shadow-xl shadow-yellow-500/10"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -291,7 +291,7 @@ function DroppableColumn({ id, title, color, tasks, isAdmin, onEdit, onViewDetai
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-violet-400 hover:text-violet-300 hover:bg-violet-500/20"
+                className="h-6 w-6 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20"
                 onClick={(e) => {
                   e.stopPropagation()
                   onAddTask && onAddTask(id)
@@ -313,7 +313,7 @@ function DroppableColumn({ id, title, color, tasks, isAdmin, onEdit, onViewDetai
         </div>
       </div>
 
-      <div className={`flex-1 space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-2 custom-scrollbar rounded-xl ${isOver ? 'bg-violet-500/10' : 'bg-slate-800'}`}>
+      <div className={`flex-1 space-y-3 overflow-y-auto max-h-[calc(100vh-280px)] pr-2 custom-scrollbar rounded-xl ${isOver ? 'bg-yellow-500/10' : 'bg-slate-800'}`}>
         <SortableContext items={tasks.map((t: any) => ({ id: t.id, ...t }))} id={id} strategy={verticalListSortingStrategy}>
           {tasks.length === 0 ? (
             <div className="text-center text-slate-500 py-8">
@@ -470,7 +470,11 @@ export default function Home() {
       const response = await fetch(`/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: COLUMNS.find((col) => col.id === targetColumnId)?.title }),
+        body: JSON.stringify({
+          status: COLUMNS.find((col) => col.id === targetColumnId)?.title,
+          updaterId: user?.id,
+          updaterRole: user?.role
+        }),
       })
 
       if (response.ok) {
@@ -608,7 +612,11 @@ export default function Home() {
       const response = await fetch(`/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: targetColumn?.title }),
+        body: JSON.stringify({
+          status: targetColumn?.title,
+          updaterId: user?.id,
+          updaterRole: user?.role
+        }),
       })
 
       if (response.ok) {
@@ -662,7 +670,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <span className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarFallback className="text-xs bg-violet-500/30 text-violet-300 border border-violet-500/50">
+                  <AvatarFallback className="text-xs bg-yellow-500/30 text-yellow-300 border border-yellow-500/50">
                     {user?.name?.split(' ').map((n: string) => n[0]).join('') || 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -692,6 +700,7 @@ export default function Home() {
         open={isDetailOpen}
         onOpenChange={setIsDetailOpen}
         task={detailTask}
+        onTaskUpdate={loadTasks}
       />
     </div>
   )

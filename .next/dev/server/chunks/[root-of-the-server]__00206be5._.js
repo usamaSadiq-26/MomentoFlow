@@ -182,8 +182,8 @@ async function POST(request) {
                 position,
                 labels: {
                     create: labels.map((label)=>({
-                            name: label.name,
-                            color: label.color || 'gray'
+                            name: typeof label === 'string' ? label : label.name,
+                            color: typeof label === 'object' && label.color ? label.color : 'gray'
                         }))
                 },
                 checklists: checklist.length > 0 ? {
@@ -262,16 +262,26 @@ async function POST(request) {
                 }
             });
         }
-        // If admin created the task, notify admin
+        // If admin created the task, notify OTHER admins
         if (creator?.role === 'ADMIN') {
-            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].notification.create({
-                data: {
-                    type: 'card_created',
-                    message: `Task "${title}" has been created`,
-                    taskId: task.id,
-                    userId: createdById
+            const otherAdmins = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].user.findMany({
+                where: {
+                    role: 'ADMIN',
+                    id: {
+                        not: createdById
+                    }
                 }
             });
+            for (const admin of otherAdmins){
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].notification.create({
+                    data: {
+                        type: 'card_created',
+                        message: `New task "${title}" has been created by Admin`,
+                        taskId: task.id,
+                        userId: admin.id
+                    }
+                });
+            }
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(task, {
             status: 201

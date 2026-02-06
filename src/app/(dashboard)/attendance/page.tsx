@@ -167,7 +167,7 @@ export default function AttendancePage() {
                 <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 col-span-1 md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <Clock className="h-5 w-5 text-violet-400" />
+                            <Clock className="h-5 w-5 text-yellow-400" />
                             Shift Controls
                         </CardTitle>
                     </CardHeader>
@@ -221,22 +221,22 @@ export default function AttendancePage() {
                 <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
                     <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                            <AlertCircle className="h-5 w-5 text-violet-400" />
+                            <AlertCircle className="h-5 w-5 text-yellow-400" />
                             Information
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex gap-3">
-                            <div className="h-8 w-8 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-                                <CalendarIcon className="h-4 w-4 text-violet-400" />
+                            <div className="h-8 w-8 rounded-lg bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                <CalendarIcon className="h-4 w-4 text-yellow-400" />
                             </div>
                             <p className="text-sm text-slate-300">
                                 Shift requests are submitted to the admin for approval at the end of each day.
                             </p>
                         </div>
                         <div className="flex gap-3">
-                            <div className="h-8 w-8 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-                                <Clock className="h-4 w-4 text-violet-400" />
+                            <div className="h-8 w-8 rounded-lg bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                <Clock className="h-4 w-4 text-yellow-400" />
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm font-semibold text-white">Firm Shift Hours</p>
@@ -249,8 +249,8 @@ export default function AttendancePage() {
                             </div>
                         </div>
                         <div className="flex gap-3">
-                            <div className="h-8 w-8 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-                                <CheckCircle2 className="h-4 w-4 text-violet-400" />
+                            <div className="h-8 w-8 rounded-lg bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                <CheckCircle2 className="h-4 w-4 text-yellow-400" />
                             </div>
                             <p className="text-sm text-slate-300">
                                 Once approved, your attendance record will contribute to your monthly report.

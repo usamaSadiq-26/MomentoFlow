@@ -181,7 +181,7 @@ export default function AttendanceAdminPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-white text-lg flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Users className="h-5 w-5 text-violet-400" />
+                                <Users className="h-5 w-5 text-yellow-400" />
                                 Requests Filter
                             </div>
                             <div className="flex items-center gap-4 bg-black/20 p-1 rounded-lg border border-white/10">
@@ -204,7 +204,7 @@ export default function AttendanceAdminPage() {
                                 placeholder="Search by employee name or email..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-slate-500 focus:ring-violet-500/50"
+                                className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-slate-500 focus:ring-yellow-500/50"
                             />
                         </div>
                     </CardContent>
@@ -253,7 +253,7 @@ export default function AttendanceAdminPage() {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-9 w-9 border border-white/10">
-                                                        <AvatarFallback className="bg-violet-500/10 text-violet-400">
+                                                        <AvatarFallback className="bg-yellow-500/10 text-yellow-400">
                                                             {record.user.name?.[0] || 'U'}
                                                         </AvatarFallback>
                                                     </Avatar>
@@ -358,7 +358,7 @@ export default function AttendanceAdminPage() {
 
                         <div className="space-y-3">
                             <label className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-                                <Clock className="h-4 w-4 text-violet-400" />
+                                <Clock className="h-4 w-4 text-yellow-400" />
                                 Override Punctuality Status
                             </label>
                             <p className="text-xs text-slate-500 mb-2">Review and adjust the punctuality status if needed before approving.</p>
@@ -399,7 +399,7 @@ export default function AttendanceAdminPage() {
                                 placeholder="Add a reason or comment..."
                                 value={adminNotes}
                                 onChange={(e) => setAdminNotes(e.target.value)}
-                                className="bg-black/20 border-white/10 focus:ring-violet-500/50 min-h-[100px]"
+                                className="bg-black/20 border-white/10 focus:ring-yellow-500/50 min-h-[100px]"
                             />
                         </div>
                     </div>

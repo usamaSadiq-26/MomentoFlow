@@ -145,7 +145,7 @@ const metadata = {
         }
     ],
     icons: {
-        icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg"
+        icon: "/favicon.ico"
     },
     openGraph: {
         title: "Z.ai Code Scaffold",

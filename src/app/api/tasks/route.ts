@@ -120,9 +120,9 @@ export async function POST(request: NextRequest) {
         assignedId: assignedId || null,
         position,
         labels: {
-          create: labels.map((label: { name: string; color: string }) => ({
-            name: label.name,
-            color: label.color || 'gray',
+          create: labels.map((label: any) => ({
+            name: typeof label === 'string' ? label : label.name,
+            color: typeof label === 'object' && label.color ? label.color : 'gray',
           })),
         },
         checklists: checklist.length > 0 ? {
@@ -203,16 +203,24 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // If admin created the task, notify admin
+    // If admin created the task, notify OTHER admins
     if (creator?.role === 'ADMIN') {
-      await db.notification.create({
-        data: {
-          type: 'card_created',
-          message: `Task "${title}" has been created`,
-          taskId: task.id,
-          userId: createdById,
-        },
+      const otherAdmins = await db.user.findMany({
+        where: {
+          role: 'ADMIN',
+          id: { not: createdById }
+        }
       })
+      for (const admin of otherAdmins) {
+        await db.notification.create({
+          data: {
+            type: 'card_created',
+            message: `New task "${title}" has been created by Admin`,
+            taskId: task.id,
+            userId: admin.id,
+          },
+        })
+      }
     }
 
     return NextResponse.json(task, { status: 201 })
