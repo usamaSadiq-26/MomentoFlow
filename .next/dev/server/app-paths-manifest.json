@@ -1,14 +1,5 @@
 {
-  "/(dashboard)/attendance-admin/page": "app/(dashboard)/attendance-admin/page.js",
-  "/(dashboard)/attendance/page": "app/(dashboard)/attendance/page.js",
-  "/(dashboard)/members/page": "app/(dashboard)/members/page.js",
   "/(dashboard)/page": "app/(dashboard)/page.js",
-  "/(dashboard)/user-approvals/page": "app/(dashboard)/user-approvals/page.js",
-  "/api/attendance/[id]/route": "app/api/attendance/[id]/route.js",
-  "/api/attendance/route": "app/api/attendance/route.js",
   "/api/notifications/route": "app/api/notifications/route.js",
-  "/api/tasks/[id]/route": "app/api/tasks/[id]/route.js",
-  "/api/tasks/route": "app/api/tasks/route.js",
-  "/api/users/pending/route": "app/api/users/pending/route.js",
-  "/api/users/route": "app/api/users/route.js"
+  "/api/tasks/route": "app/api/tasks/route.js"
 }
