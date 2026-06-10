@@ -4,14 +4,14 @@ import { db } from '@/lib/db'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, password, role = 'EMPLOYEE' } = body
+    const { name, email, role = 'EMPLOYEE' } = body
 
     console.log('Signup request received:', { name, email, role })
 
     // Validate required fields
-    if (!name || !email || !password) {
+    if (!name || !email) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Name and email are required' },
         { status: 400 }
       )
     }
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     console.log('Creating user with role:', finalRole, 'isFirstUser:', isFirstUser, 'requestedRole:', requestedRole)
 
-    // Create user with requested role
+    // Create user without password
     const userData: any = {
       email,
       name,
